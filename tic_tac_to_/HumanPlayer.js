@@ -1,6 +1,9 @@
+//const readlineSync = require('readline-sync');
+
 class HumanPlayer {
-  constructor() {
-    this.name = 'HumanPlayer';
+  constructor(num, game) {
+    this.player = num;
+    this.game = game;
   }
 
   placeMarker(m) {
@@ -8,22 +11,13 @@ class HumanPlayer {
   }
 
   getMove(move) {
-    switch (true) {
-      case move === 1:
-      case move === 2:
-      case move === 3:
-      case move === 4:
-      case move === 5:
-      case move === 6:
-      case move === 7:
-      case move === 8:
-      case move === 9:
-        this.placeMarker(move);
-        break;
-      default:
-        console.log(`Say what? I might have heard ${move}`);
-        break;
-    }
+    console.log('@humanPlayer move:', move, 'this.player:', this.player);
+    // if (move > 0 && move <= 9) {
+    //   // this.placeMarker(move);
+    //   game.board.isValidMove(move);
+    // } else {
+    //   console.log(`Say what? I might have heard ${move}`);
+    // }
   }
 }
 

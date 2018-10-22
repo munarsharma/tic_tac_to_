@@ -12,16 +12,44 @@ const ComputerPlayer = require('./ComputerPlayer.js');
 class Game {
   constructor() {
     this.name = 'Game';
+    this.currentPlayer = 1;
+    this.nextPlayer = 2;
+    this.rl = rl;
+    this.board = new Board();
+    this.p1 = new HumanPlayer(1, this);
+    this.p2 = new HumanPlayer(2, this);
+  }
+
+  getMove(move) {
+    console.log(
+      '@humanPlayer move:',
+      move,
+      'currentPlayer:',
+      this.currentPlayer
+    );
+    this.switchPlayers();
+    //this["p" + this.currentPlayer].getMove(move);
+  }
+
+  play() {
+    this.board.makeBoard();
+  }
+
+  switchPlayers() {
+    this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
+    this.nextPlayer = this.nextPlayer === 1 ? 2 : 1;
   }
 }
 
-let mateo = new HumanPlayer();
-let muna = new ComputerPlayer();
-let jinx = new Board();
-
+let game = new Game();
+// let mateo = new HumanPlayer();
+// let muna = new ComputerPlayer();
+// let jinx = new Board();
+//
 rl.on('line', line => {
   let move = +line.trim();
-  mateo.getMove(move);
+  game.getMove(move);
 });
 
-console.log(mateo);
+game.play();
+// console.log(game);
