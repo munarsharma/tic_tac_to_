@@ -1,6 +1,6 @@
 //const readlineSync = require('readline-sync');
 
-class HumanPlayer {
+class Player {
   constructor(num, game) {
     this.player = num;
     this.game = game;
@@ -11,7 +11,7 @@ class HumanPlayer {
   }
 
   getMove(move) {
-    console.log('@humanPlayer move:', move, 'this.player:', this.player);
+    console.log("@humanPlayer move:", move, "this.player:", this.player);
     // if (move > 0 && move <= 9) {
     //   // this.placeMarker(move);
     //   game.board.isValidMove(move);
@@ -21,4 +21,4 @@ class HumanPlayer {
   }
 }
 
-module.exports = HumanPlayer;
+module.exports = Player;
