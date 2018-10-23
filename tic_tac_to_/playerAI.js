@@ -5,3 +5,8 @@ class ComputerPlayer {
 }
 
 module.exports = ComputerPlayer;
+// getAvailableMoves=>openTiles
+// setTimeout => chooseRandomTile
+// Atari => 🕹
+// Siri => 🖥
+// ifTileWins=>chooseRandomTile

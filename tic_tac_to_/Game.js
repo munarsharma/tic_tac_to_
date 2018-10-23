@@ -6,7 +6,7 @@ const rl = readline.createInterface({
 
 const Player = require('./player.js');
 const Board = require('./board.js');
-// const ComputerPlayer = require("./ComputerPlayer.js");
+// const ai = require("./ai.js");
 
 class Game {
   constructor(p1, p2) {
@@ -28,21 +28,28 @@ class Game {
     if (this.isSingleDigit(move) && this.board.isTileOpen(move - 1)) {
       this.placeMarker(move);
       this.board.display();
-      if (this.isWon()) {
-        this.win();
-      } else if (this.isTie()) {
-        this.tie();
-      } else {
-        this.switchPlayers();
-      }
-      // console.log(move);
-      // console.log(this["p" + this.playerNow].marker);
+      this.checkState();
     } else {
-      this.board.display();
-      console.log('Press a number between 1-9');
+      this.inValidMove();
     }
-    // console.log(move);
-    // console.log(this);
+  }
+
+  checkState() {
+    if (this.isWon()) {
+      this.win();
+    } else if (this.isTie()) {
+      this.tie();
+    } else {
+      this.switchPlayers();
+    }
+  }
+
+  inValidMove() {
+    this.board.display();
+    let openTiles = this.board.openTiles();
+    console.log(`
+Please select tiles:
+${openTiles}.`);
   }
 
   isSingleDigit(move) {
@@ -74,7 +81,12 @@ class Game {
   }
 
   win() {
-    console.log(`Player ${this['p' + this.playerNow].player} Wins!`);
+    let winner = this['p' + this.playerNow].marker;
+    console.log(
+      `
+Player ${this['p' + this.playerNow].player} Wins!
+${winner} ${winner} ${winner}`
+    );
     this.over();
   }
 
@@ -85,7 +97,9 @@ class Game {
   }
 
   tie() {
-    console.log(`It's a Tie!`);
+    console.log(`
+It's a Tie!
+${this.p1.marker}  ${this.p2.marker}`);
     this.over();
   }
 
