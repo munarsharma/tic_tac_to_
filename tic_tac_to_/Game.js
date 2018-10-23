@@ -27,7 +27,6 @@ class Game {
   loop(move) {
     if (this.isSingleDigit(move) && this.board.isTileOpen(move - 1)) {
       this.placeMarker(move);
-      this.board.display();
       this.checkState();
     } else {
       this.inValidMove();
@@ -59,6 +58,7 @@ ${openTiles}.`);
   placeMarker(move) {
     let tile = move - 1;
     this.board.tiles[tile] = this['p' + this.playerNow].marker;
+    this.board.display();
   }
 
   isWon() {
