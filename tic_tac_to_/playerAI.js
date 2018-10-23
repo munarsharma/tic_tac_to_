@@ -9,4 +9,4 @@ module.exports = ComputerPlayer;
 // setTimeout => chooseRandomTile
 // Atari => 🕹
 // Siri => 🖥
-// ifTileWins=>chooseRandomTile
+// ifTileWins=>chooseTile
