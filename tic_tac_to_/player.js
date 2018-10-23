@@ -1,24 +1,9 @@
-//const readlineSync = require('readline-sync');
-
 class Player {
-  constructor(num, game) {
-    this.player = num;
-    this.game = game;
-  }
-
-  placeMarker(m) {
-    console.log(`you chose ${m}`);
-  }
-
-  getMove(move) {
-    console.log("@humanPlayer move:", move, "this.player:", this.player);
-    // if (move > 0 && move <= 9) {
-    //   // this.placeMarker(move);
-    //   game.board.isValidMove(move);
-    // } else {
-    //   console.log(`Say what? I might have heard ${move}`);
-    // }
+  constructor(player) {
+    let markers = ['😘', '🤗'];
+    this.player = player;
+    this.marker = markers[player - 1];
+    this.brain = true;
   }
 }
-
 module.exports = Player;

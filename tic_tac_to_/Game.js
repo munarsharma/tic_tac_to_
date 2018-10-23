@@ -6,43 +6,97 @@ const rl = readline.createInterface({
 
 const Player = require('./player.js');
 const Board = require('./board.js');
-// const ComputerPlayer = require("./ComputerPlayer.js");
+const AI = require('./ai.js');
 
 class Game {
-  constructor(p1, p2) {
+  constructor(players) {
     this.active = false;
-    this.p1 = { player: 1, marker: '😘' };
-    this.p2 = { player: 2, marker: '🤗' };
     this.board = new Board();
     this.playerNow = 1;
     this.playerNext = 2;
-    // this.turn = 0;
+    this.players = 0;
+    this.init(players);
+    console.log(this, this.isHumanTurn());
   }
 
-  play() {
+  init(players) {
+    for (let i = players; i > 0; i--) {
+      let player = this.addPlayer();
+      this['p' + player] = new Player(player);
+    }
+
+    let aiPlayers = 2 - this.players;
+    if (aiPlayers) {
+      this.spawn(aiPlayers);
+    }
+  }
+
+  addPlayer() {
+    this.players++;
+    return this.players;
+  }
+
+  spawn(aiPlayers) {
+    //choose random opponent?
+    for (let i = aiPlayers; i > 0; i--) {
+      let player = this.addPlayer();
+      this['p' + player] = new AI(player);
+    }
+
+    if (aiPlayers === 2) {
+      this.checkTurn();
+    }
+  }
+
+  isHumanTurn() {
+    return this['p' + this.playerNow].brain;
+  }
+
+  start() {
     this.active = true;
     this.board.display();
   }
 
-  loop(move) {
+  play(move) {
     if (this.isSingleDigit(move) && this.board.isTileOpen(move - 1)) {
       this.placeMarker(move);
-      this.board.display();
-      if (this.isWon()) {
-        this.win();
-      } else if (this.isTie()) {
-        this.tie();
-      } else {
-        this.switchPlayers();
-      }
-      // console.log(move);
-      // console.log(this["p" + this.playerNow].marker);
+      this.checkState();
+      this.checkTurn();
     } else {
-      this.board.display();
-      console.log('Press a number between 1-9');
+      this.inValidMove();
     }
-    // console.log(move);
-    // console.log(this);
+  }
+
+  checkState() {
+    if (this.isWon()) {
+      this.win();
+    } else if (this.isTie()) {
+      this.tie();
+    } else {
+      this.switchPlayers();
+    }
+  }
+
+  checkTurn() {
+    if (!this.isHumanTurn()) {
+      let openTiles = this.board.openTiles();
+      let ai = this['p' + this.playerNow];
+      let move = ai.makeMove(openTiles);
+      // console.log(`${ai.marker}  chose ${move} from ${openTiles}`);
+      setTimeout(() => {
+        this.play(move);
+      }, 1200);
+    }
+  }
+
+  inValidMove() {
+    if (this.isActive()) {
+      this.board.display();
+      let openTiles = this.board.openTiles();
+      console.log(`
+Please select tiles:
+${openTiles}.`);
+    }
   }
 
   isSingleDigit(move) {
@@ -52,10 +106,10 @@ class Game {
   placeMarker(move) {
     let tile = move - 1;
     this.board.tiles[tile] = this['p' + this.playerNow].marker;
+    this.board.display();
   }
 
   isWon() {
-    // this.turn++;
     let t = this.board.tiles;
     if (
       (t[0] === t[1] && t[1] === t[2]) ||
@@ -74,18 +128,23 @@ class Game {
   }
 
   win() {
-    console.log(`Player ${this['p' + this.playerNow].player} Wins!`);
+    let winner = this['p' + this.playerNow].marker;
+    console.log(
+      `
+Player ${this['p' + this.playerNow].player} Wins!
+${winner} ${winner} ${winner}`
+    );
     this.over();
   }
 
   isTie() {
     return this.board.tiles.every(el => typeof el !== 'number');
-
-    // return this.turn === 9;
   }
 
   tie() {
-    console.log(`It's a Tie!`);
+    console.log(`
+It's a Tie!
+${this.p1.marker}  ${this.p2.marker}`);
     this.over();
   }
 
@@ -103,16 +162,29 @@ class Game {
   }
 }
 
-let game = new Game();
-
+let game = null;
+console.log('Choose the number of players:\n [ 0 ] [ 1 ] [ 2 ] ');
+counter = 1;
 rl.on('line', line => {
-  if (game.isActive()) {
-    let move = +line.trim();
-    game.loop(move);
+  if (counter && (line >= 0 && line <= 2)) {
+    counter--;
+    game = new Game(line);
+    game.start();
+  } else if (counter) {
+    console.clear();
+    console.log(`Choose the number of players:
+ [ 0 ] [ 1 ] [ 2 ] `);
+    console.log(`
+Please select 0 or 1 or 2.`);
   } else {
-    game.board.display();
-    console.log('Game over');
+    if (game.isActive() && game.isHumanTurn()) {
+      let move = +line.trim();
+      game.play(move);
+    }
   }
+  //NOTE TODO
+  // else {
+  //   game.board.display();
+  //   console.log('Game over');
+  // }
 });
-
-game.play();
