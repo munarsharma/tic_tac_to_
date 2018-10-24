@@ -4,6 +4,7 @@ class AI {
     this.player = player;
     this.marker = markers[this.player - 1];
     this.brain = false;
+
     // this.turn = 0;
   }
 
@@ -13,6 +14,7 @@ class AI {
 }
 
 module.exports = AI;
+
 // setTimeout => chooseRandomTile
 // Atari => 🕹
 // Siri => 🖥

@@ -19,11 +19,13 @@ class Board {
     this.tiles.forEach((el, i) => {
       if (i === 0 || i === 1 || i === 3 || i === 4 || i === 6 || i === 7) {
         str += (typeof el === 'number' ? gfx[i] : el) + '  | ';
+
         // str += (typeof el === 'number' ? gfx[i] : el) + '  ◽ ';
         // str += (typeof el === 'number' ? gfx[i] : el) + '  🔸 ';
       } else if (i === 2 || i === 5) {
         str += typeof el === 'number' ? gfx[i] : el;
         console.log(str);
+
         // console.log('◽◽◽◽◽◽◽');
         // console.log('🔸🔸🔸🔸🔸🔸🔸');
         // console.log('---------');

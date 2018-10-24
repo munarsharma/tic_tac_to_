@@ -16,7 +16,8 @@ class Game {
     this.playerNext = 2;
     this.players = 0;
     this.init(players);
-    console.log(this, this.isHumanTurn());
+
+    // console.log(this, this.isHumanTurn());
   }
 
   init(players) {
@@ -67,6 +68,16 @@ class Game {
     }
   }
 
+  isSingleDigit(move) {
+    return move > 0 && move <= 9;
+  }
+
+  placeMarker(move) {
+    let tile = move - 1;
+    this.board.tiles[tile] = this['p' + this.playerNow].marker;
+    this.board.display();
+  }
+
   checkState() {
     if (this.isWon()) {
       this.win();
@@ -82,6 +93,7 @@ class Game {
       let openTiles = this.board.openTiles();
       let ai = this['p' + this.playerNow];
       let move = ai.makeMove(openTiles);
+
       // console.log(`${ai.marker}  chose ${move} from ${openTiles}`);
       setTimeout(() => {
         this.play(move);
@@ -97,16 +109,6 @@ class Game {
 Please select tiles:
 ${openTiles}.`);
     }
-  }
-
-  isSingleDigit(move) {
-    return move > 0 && move <= 9;
-  }
-
-  placeMarker(move) {
-    let tile = move - 1;
-    this.board.tiles[tile] = this['p' + this.playerNow].marker;
-    this.board.display();
   }
 
   isWon() {
@@ -182,6 +184,7 @@ Please select 0 or 1 or 2.`);
       game.play(move);
     }
   }
+
   //NOTE TODO
   // else {
   //   game.board.display();
